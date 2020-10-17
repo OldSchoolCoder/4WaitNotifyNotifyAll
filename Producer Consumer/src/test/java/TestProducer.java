@@ -3,7 +3,7 @@ import org.junit.Test;
 public class TestProducer {
     @Test
     public void testProducer() throws InterruptedException {
-        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>();
+        SimpleBlockingQueue<Integer> queue = new SimpleBlockingQueue<>(1);
         Thread producer = new Thread(() -> {
             try {
                 queue.offer(100);

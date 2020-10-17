@@ -9,23 +9,25 @@ public class SimpleBlockingQueue<T> {
     @GuardedBy("this")
     private Queue<T> queue = new LinkedList<>();
     @GuardedBy("this")
-    boolean isFull;
+    private final int size;
     private final Object monitor = this;
 
+    public SimpleBlockingQueue(int size) {
+        this.size = size;
+    }
+
     public synchronized void offer(T value) throws InterruptedException {
-        if (isFull) {
+        if (queue.size() == size) {
             wait();
         }
         queue.add(value);
-        isFull = true;
         monitor.notify();
     }
 
     public synchronized T poll() throws InterruptedException {
-        if (!isFull) {
+        if (queue.size() < size) {
             wait();
         }
-        isFull = false;
         notify();
         return queue.poll();
     }
