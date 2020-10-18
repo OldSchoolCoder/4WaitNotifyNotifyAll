@@ -17,18 +17,18 @@ public class SimpleBlockingQueue<T> {
     }
 
     public synchronized void offer(T value) throws InterruptedException {
-        if (queue.size() == size) {
-            wait();
+        while (queue.size() == size) {
+            monitor.wait();
         }
         queue.add(value);
         monitor.notify();
     }
 
     public synchronized T poll() throws InterruptedException {
-        if (queue.size() < size) {
-            wait();
+        while (queue.size() < size) {
+            monitor.wait();
         }
-        notify();
+        monitor.notify();
         return queue.poll();
     }
 }
